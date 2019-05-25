@@ -6,7 +6,7 @@ This is a FreeCodeCamp project that i made a time ago and im remaking it because
 
 - [ ] Add geoLocation.
 - [ ] Add API info.
-- [ ] Add weather icons.
+- [x] Add weather icons.
 - [ ] Add weather images.
 - [ ] Show weather condition and images.
 
