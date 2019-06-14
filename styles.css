@@ -20,54 +20,15 @@ body{
     height: 100%;
 }
 
-.center {
-    max-width: 120rem;
-    display: flex;
-    justify-content: space-between !important;
-}
-
-.nav-container {
-    width: 100%;
-    display: flex;
-}
-
-.container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.main-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    border: 2px solid red;
-}
-
 .navbar{
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 5rem;
     box-shadow: 0px 10px 40px 1px rgba(0,0,0,0.35);
     background-color: #e3f2fd;
     font-size: 1.8rem;
-}
-
-.navbar-brand {
-    margin-left: 1.7rem;
-}
-
-ul li {
-    display: flex;
-    align-items: center;
-}
-
-ul li:last-of-type {
-    margin-right: 1.5rem;
-}
-
-.menu {
-    display: flex;
-    align-items: center;
 }
 
 .title{
@@ -75,12 +36,8 @@ ul li:last-of-type {
     font-size: 3.5rem;
 }
 
-.degrees, .location{
+.degrees .location{
     font-family: 'Roboto', sans-serif;
-}
-
-.degrees:hover {
-    border-bottom: 2px solid #889197;
 }
 
 .location{
@@ -89,32 +46,49 @@ ul li:last-of-type {
 }
 
 .card-container {
-    height: 46rem;
-    width: 110rem;
+    height: 45rem;
+    margin-top: 2rem;
     display: flex;
-    align-items: flex-start;
-    margin: 1rem auto;
-    border: 2px solid red;
 }
 
 .card {
-    box-shadow: 0px 10px 40px 1px rgba(0,0,0,0.35);
+    width: 33%;
+    margin: 1.3rem;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.30);
     background-color: #e3f2fd;
-    margin-right: 1rem;
 }
 
-.card:last-of-type {
-    margin-right: 0;
+.forecast-container {
+    display: flex;
+    flex-direction: column;
+    height: 45rem;
 }
 
-.card-img {
-    background-color: #889197;
+.containers {
+    display: flex;
 }
 
-.complemmentary-img {
-    max-height: 100%;
+.main-card {
+    border: 1px solid black;
 }
 
-.container {
-    border: 2px solid black;
+.forecast {
+    transition: all 0.1s ease;
+    text-align: center;
+}
+
+.forecast:hover {
+    box-shadow: 18px 18px 20px 0px rgba(0,0,0,0.30);
+    transform: translate(-1px, -3px);
+}
+
+.forecast-img {
+    width: 100%;
+    height: 50%;
+    margin-top: 1rem;
+}
+
+.forecast-temp {
+    text-align: center;
+    font-size: 30px;
 }
