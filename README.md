@@ -4,11 +4,12 @@ This is a FreeCodeCamp project that i made a time ago and im remaking it because
 
 ## To Do.
 
-- [ ] Add geoLocation.
-- [ ] Add API info.
+- [x] Add geoLocation.
+- [x] Add API info.
 - [x] Add weather icons.
-- [ ] Add weather images.
-- [ ] Show weather condition and images.
+- [x] Add weather images.
+- [x] Show weather condition and images.
+- [x] Show forecast weather condition and images.
 
 ## To Fix.
 
