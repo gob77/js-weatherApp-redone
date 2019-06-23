@@ -1,12 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let h = document.getElementsByClassName("card-body")[1];
-    let c_h = document.getElementsByClassName("card")[1];
-    console.log(window.getComputedStyle(h).height);
-    console.log(`card${window.getComputedStyle(c_h).height}`);
-
     navigator.geolocation.getCurrentPosition(position => {
-        let lat = parseFloat(position.coords.latitude).toFixed(2);
-        let lon = parseFloat(position.coords.longitude).toFixed(2);
+        let lat = parseFloat(position.coords.latitude).toFixed(3);
+        let lon = parseFloat(position.coords.longitude).toFixed(3);
         getWeather(lat, lon);
         getForecast(lat, lon);
     });
@@ -28,10 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    let showDate = timestamp => {
+        let date = new Date(timestamp * 1000);
+        let day = date.getDate();
+        let month = date.getMonth();
+        let year = date.getFullYear();
+
+        return `${day} / ${month < 10 ? `0` : month}${month} / ${year}`;
+    };
+
     async function getWeather(a, b) {
         let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
         let data = await response.json();
-        //console.log(data);
         let temp = document.getElementById("temp");
         let location = document.getElementById("location");
         let date = document.getElementById("date");
@@ -40,21 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
 
-        let showDate = () => {
-            let date = new Date(data.dt * 1000);
-            let day = date.getDate();
-            let month = date.getMonth();
-            let year = date.getFullYear();
-
-            return `${day}/${month}/${year}`;
-        };
-
-        date.textContent = showDate();
-
-        console.log(data);
+        date.textContent = showDate(data.dt);
 
         location.textContent = data.name;
-        temp.textContent = `${parseInt(data.main.temp)}°C`;
+        temp.textContent = `${Math.round(data.main.temp)}°C`;
         weatherIcon.src = icon(data.weather[0].id);
     }
 
@@ -69,27 +61,54 @@ document.addEventListener("DOMContentLoaded", () => {
         let forecastDate = document.getElementsByClassName("forecast-date");
         let forecastImg = document.getElementsByClassName("forecast-img");
 
-        // check later if the function below is right
-
-        let test = () => {
-            let tempStore = [];
-
-            for (var i = 1; i < forecastList.length; i++) {
-                if (i % 8 === 0 || i === 39) {
-                    tempStore.push(forecastList[i]);
-                }
+        for (let i = 0; i < forecastList.length; i++) {
+            if (i > 12 && i < 21) {
+                console.log(forecastList[i].weather[0].id);
             }
+        }
 
-            for (let i = 0; i < forecastTemp.length; i++) {
-                console.log(tempStore[i].weather[0].id);
-                let date = new Date(tempStore[i].dt * 1000);
-                forecastTemp[i].textContent = `Min ${parseInt(tempStore[i].main.temp)}°C`;
-                forecastDate[i].textContent = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-                forecastImg[i].src = icon(tempStore[i].weather[0].id);
-                forecastWeather[i].textContent = `${tempStore[i].weather[0].main} - ${tempStore[i].weather[0].description}`;
-            }
-            //alert("data fully loaded");
+        // The function below was made in colaboration with Matias Fernandez (https://github.com/thematho)
+
+        let currentDate = new Date();
+        let nextDays = {
+            /* 22 : {
+                min : x,
+                max: x
+            } */
         };
-        test();
+
+        for (let i = 1; i < 6; i++) {
+            let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
+            nextDays[nextDay.getDate()] = {};
+            forecastDate[i - 1].textContent = `${nextDay.getDate()} / ${nextDay.getMonth() < 10 ? `0` : nextDay.getMonth()}${nextDay.getMonth()} / ${nextDay.getFullYear()}`;
+        }
+        currentDate = new Date();
+
+        for (let i = 0; i < forecastList.length; i++) {
+            let date = new Date(forecastList[i].dt * 1000);
+            if (currentDate.getDate() != date.getDate()) {
+                nextDays[date.getDate()].min = nextDays[date.getDate()].min == null ? forecastList[i].main.temp_min : nextDays[date.getDate()].min < forecastList[i].main.temp_min ? nextDays[date.getDate()].min : forecastList[i].main.temp_min;
+
+                nextDays[date.getDate()].max = nextDays[date.getDate()].max == null ? forecastList[i].main.temp_max : nextDays[date.getDate()].max > forecastList[i].main.temp_max ? nextDays[date.getDate()].max : forecastList[i].main.temp_max;
+
+                nextDays[date.getDate()].weather = nextDays[date.getDate()].weather == null ? forecastList[i].weather[0].main : nextDays[date.getDate()].weather < forecastList[i].weather[0].main ? nextDays[date.getDate()].weather : forecastList[i].weather[0].main;
+
+                nextDays[date.getDate()].description = nextDays[date.getDate()].description == null ? forecastList[i].weather[0].description : nextDays[date.getDate()].description < forecastList[i].weather[0].description ? nextDays[date.getDate()].description : forecastList[i].weather[0].description;
+
+                nextDays[date.getDate()].id = nextDays[date.getDate()].id == null ? forecastList[i].weather[0].id : nextDays[date.getDate()].id > forecastList[i].weather[0].id ? nextDays[date.getDate()].id : forecastList[i].weather[0].id;
+            }
+        }
+
+        console.log(nextDays);
+
+        // The function above was made in colaboration with Matias Fernandez (https://github.com/thematho)
+
+        let counter = 0;
+        for (keys in nextDays) {
+            forecastTemp[counter].textContent = `Min: ${Math.round(nextDays[keys].min)}°C - Max: ${Math.round(nextDays[keys].max)}°C`;
+            forecastImg[counter].src = icon(nextDays[keys].id);
+            forecastWeather[counter].textContent = `${nextDays[keys].weather} - ${nextDays[keys].description}`;
+            counter++;
+        }
     }
 });
