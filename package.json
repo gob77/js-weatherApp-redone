@@ -1,0 +1,25 @@
+{
+  "name": "realtime_weather",
+  "version": "1.0.0",
+  "description": "web app for current and forecast weather",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "weather",
+    "forecast",
+    "temperature"
+  ],
+  "author": "Mauricio Ortiz",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "please-wait": "0.0.5",
+    "popper.js": "^1.15.0"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0"
+  }
+}

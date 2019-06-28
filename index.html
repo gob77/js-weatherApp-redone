@@ -1,94 +1,200 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto:400,700&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
-        <script type="text/javascript" src="bootstrap.min.js"></script>
+        <link rel="stylesheet" href="node_modules/please-wait/build/please-wait.css" />
+        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+        <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="styles.css" />
         <title>RealTime Weather!</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light hidden">
-            <div>
-                <a class="navbar-brand title" href="#">RealTime Weather</a>
-            </div>
-            <div>
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link degrees" role="button" href="#">Farenheit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link degrees" role="button" href="#">Celsius</a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link location disabled" href="#" id="location">Location</span>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <div class="inner">
+            <h1>hello world</h1>
+            <!--  <nav class="navbar navbar-light p-0">
+                <div class="title-container">
+                    <a class="navbar-brand title" href="#">RealTime Weather</a>
+                </div>
+                <div class="menu-container">
+                    <ul class="navbar-nav nav-pills">
+                        <li class="nav-item">
+                            <button id="units" class="units">°C/°F</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-primary search" data-toggle="modal" data-target="#exampleModal">
+                                Search By City
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link location disabled" href="#" id="location">Location</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav> -->
 
-        <main>
-            <div class="card-container">
-                <div class="card w-25 h-100 container ">
-                    <div class="card w-90 h-90 p-2 main-card">
-                        <img class="card-img" src="img/sun.svg" alt="Card image cap" id="weather_icon" />
-                        <div class="card-body h-50 h-50 w-100 p-0">
-                            <h5 class="card-title weather w-100 " id="weather">Its a sunny Day</h5>
-                            <p class="card-text current-temp" id="temp"></p>
-                            <p id="date" class="current-date"></p>
-                        </div>
-                    </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="title-container">
+                    <a class="navbar-brand title" href="#">RealTime Weather</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
 
-                <div class="card w-75 h-100 forecast-container">
-                    <div class="containers h-50">
-                        <div class="card w-50 h-80 forecast">
-                            <img class="card-img forecast-img" src="img/sun.svg" />
-                            <div class="card-body h-50">
-                                <h5 class="card-title forecast-weather w-100">Clear Sky</h5>
-                                <p class="card-text temp forecast-temp">28 ºC</p>
-                                <p class="forecast-date"></p>
-                            </div>
+                <div class="collapse navbar-collapse menu-container" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link units" href="#">°F |°C <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item test">
+                            <button class="searchBtn" type="button"><i class="fas fa-search"></i></button>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link location disabled" href="#" id="location">Location</span>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" />
+                        <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#exampleModalCenter" data-toggle="modal">Search</button>
+                    </form>
+                </div>
+            </nav>
+
+            <!-- Search by city Modal content -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="card w-50 h-80 forecast">
-                            <img class="card-img forecast-img" src="img/sun.svg" />
-                            <div class="card-body h-50">
-                                <h5 class="card-title forecast-weather">Clear Sky</h5>
-                                <p class="card-text temp forecast-temp">28 ºC</p>
-                                <p class="forecast-date"></p>
-                            </div>
+                        <div class="modal-body">
+                            ...
                         </div>
-                    </div>
-                    <div class="containers h-50">
-                        <div class="card w-33 h-80 forecast">
-                            <img class="card-img forecast-img" src="img/sun.svg" />
-                            <div class="card-body h-50">
-                                <h5 class="card-title forecast-weather">Clear Sky</h5>
-                                <p class="card-text temp forecast-temp">28 ºC</p>
-                                <p class="forecast-date"></p>
-                            </div>
-                        </div>
-                        <div class="card w-33 h-80 forecast">
-                            <img class="card-img forecast-img" src="img/sun.svg" />
-                            <div class="card-body h-50">
-                                <h5 class="card-title forecast-weather">Clear Sky</h5>
-                                <p class="card-text temp forecast-temp">28 ºC</p>
-                                <p class="forecast-date"></p>
-                            </div>
-                        </div>
-                        <div class="card w-33 h-80 forecast">
-                            <img class="card-img forecast-img" src="img/sun.svg" />
-                            <div class="card-body h-50">
-                                <h5 class="card-title forecast-weather">Clear Sky</h5>
-                                <p class="card-text temp forecast-temp">28 ºC</p>
-                                <p class="forecast-date"></p>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
 
+            <main class="wrapper">
+                <div class="card-container">
+                    <div class="card container ">
+                        <div class="card p-2 main-card">
+                            <div class="img-container">
+                                <img class="card-img" src="img/sun.svg" alt="Card image cap" id="weather_icon" />
+                            </div>
+                            <div class="card-body body-container p-0">
+                                <div class="weather-container">
+                                    <h5 class="card-title current-weather" id="weather">Its a sunny Day</h5>
+                                </div>
+                                <div class="temp-container">
+                                    <p class="card-text current-temp" id="temp"></p>
+                                </div>
+                                <div class="date-container">
+                                    <p id="date" class="current-date"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card forecast-container">
+                        <div class="containers upper">
+                            <div class="card forecast">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card forecast">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="containers lower">
+                            <div class="card forecast">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card forecast">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card forecast">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script src="node_modules/please-wait/build/please-wait.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
     </body>
 </html>
