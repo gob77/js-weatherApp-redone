@@ -1,10 +1,16 @@
-let test = document.getElementById("temp");
-let value = test.textContent;
-console.log(value);
-
 document.addEventListener("DOMContentLoaded", () => {
-    let test = document.getElementById("temp");
-    console.log(test.textContent);
+    let test = window.matchMedia("(max-width: 600px)");
+
+    function testing() {
+        if (test.matches === true) {
+            console.log("width is less than 600 pixels");
+        } else {
+            console.log("width is more than 600 pixels");
+        }
+    }
+
+    test.addListener(testing);
+
     let loading_screen = pleaseWait({
         logo: "img/loading1.gif",
         backgroundColor: "#E3F2FD",
@@ -38,6 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
         getForecast(lat, lon);
     });
 
+    let city = document.getElementById("citybtn");
+    city.addEventListener("click", getCity);
+
     let icon = weather => {
         let weatherId = weather;
         if (weatherId >= 801 && weatherId <= 804) {
@@ -52,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return `img/300 - drizzle.svg`;
         } else if (weatherId >= 200 && weatherId <= 232) {
             return `img/200 - thunder.svg`;
-        } else if (weatherId === 741 || weatherId === 701) {
+        } else if (weatherId === 741 || weatherId === 701 || weatherId === 721) {
             return `img/700 - fog.svg`;
         }
     };
@@ -195,6 +204,28 @@ document.addEventListener("DOMContentLoaded", () => {
             counter++;
         }
     }
+
+    async function getCity() {
+        let cityName = document.getElementById("city").value;
+        let modalTitle = document.getElementById("modal-title");
+        let cityTemp = document.getElementById("city-temp");
+        let cityWeather = document.getElementById("city-weather");
+        let cityDate = document.getElementById("city-date");
+        let cityIcon = document.getElementById("city-icon");
+        console.log(cityName);
+
+        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
+        let data = await response.json();
+
+        console.log(data.weather[0].id);
+        modalTitle.textContent = `Showing Weather for: ${data.name} - ${data.sys.country}`;
+        cityTemp.textContent = `Current Weather in ${data.name} is: ${data.main.temp}°C`;
+        cityWeather.textContent = `the weather is ${data.weather[0].main}`;
+        cityDate.textContent = `${showDate(data.dt)}`;
+        cityIcon.src = icon(data.weather[0].id);
+    }
+
+    $("#sharedModal").modal({ backdrop: "static", show: false });
 
     loading_screen.finishing = true;
 });

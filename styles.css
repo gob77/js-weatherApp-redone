@@ -87,6 +87,11 @@ ul li:last-of-type {
     transition: all 0.2s ease-in-out;
 }
 
+.units:hover {
+    font-weight: 700;
+    color: black;
+}
+
 .search {
     border: 1px solid black;
     color: black;
@@ -279,13 +284,6 @@ p {
     text-align: center;
 }
 
-.modal-body {
-    height: 5rem;
-}
-.modal-title__container {
-    width: 100%;
-}
-
 form {
     width: 100%;
     height: 100%;
@@ -303,6 +301,10 @@ form .btn {
     width: 20%;
     height: 100%;
     font-size: 1.5rem;
+}
+
+.modal-card {
+    border: 1px solid;
 }
 
 @media (max-width: 600px) {

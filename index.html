@@ -14,27 +14,6 @@
     </head>
     <body>
         <div class="inner">
-            <!--  <nav class="navbar navbar-light p-0">
-                <div class="title-container">
-                    <a class="navbar-brand title" href="#">RealTime Weather</a>
-                </div>
-                <div class="menu-container">
-                    <ul class="navbar-nav nav-pills">
-                        <li class="nav-item">
-                            <button id="units" class="units">°C/°F</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-primary search" data-toggle="modal" data-target="#exampleModal">
-                                Search By City
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link location disabled" href="#" id="location">Location</span>
-                        </li>
-                    </ul>
-                </div>
-            </nav> -->
-
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="title-container">
                     <a class="navbar-brand title" href="#">RealTime Weather</a>
@@ -49,35 +28,71 @@
                             <a class="nav-link units" href="#">°F |°C <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item test">
-                            <button class="searchBtn" type="button"><i class="fas fa-search"></i></button>
+                            <button class="searchBtn" data-toggle="modal" data-target="#searchModal" type="button"><i class="fas fa-search"></i></button>
                         </li>
                         <li class="nav-item">
                             <span class="nav-link location disabled" href="#" id="location">Location</span>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" />
-                        <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#exampleModalCenter" data-toggle="modal">Search</button>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" id="city" />
+                        <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#sharedModal" data-toggle="modal" id="citybtn">Search</button>
                     </form>
                 </div>
             </nav>
 
-            <!-- Search by city Modal content -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <!-- Search by city result -->
+
+            <div class="modal fade" id="sharedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                        <div class="modal-header" id="modal-title">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <div class="card modal-card">
+                                <div class="img-container">
+                                    <img class="card-img forecast-img" src="img/sun.svg" />
+                                </div>
+                                <div class="card-body body-container ">
+                                    <div class="weather-container">
+                                        <h5 class="card-title forecast-weather">Clear Sky</h5>
+                                    </div>
+                                    <div class="forecast-temp__container">
+                                        <p class="card-text temp forecast-temp">28 ºC</p>
+                                    </div>
+                                    <div class="date-container">
+                                        <p class="forecast-date"></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search by city field in mobile -->
+
+            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Mobile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" />
+                                <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#searchModal,#sharedModal" data-dismiss="modal" data-toggle="modal">Search</button>
+                            </form>
                         </div>
                     </div>
                 </div>
