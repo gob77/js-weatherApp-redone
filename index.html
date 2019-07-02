@@ -15,6 +15,7 @@
     <body>
         <div class="inner">
             <!-- Navbar and Menu -->
+
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="title-container">
                     <a class="navbar-brand title" href="#">RealTime Weather</a>
@@ -41,6 +42,27 @@
                     </form>
                 </div>
             </nav>
+
+            <!-- Search by city modal for mobile -->
+
+            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Mobile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" id="searchForMobile" required />
+                                <button class="btn btn-outline-success my-2 my-sm-0 search" id="mobile-search" type="button" data-target="#sharedModal" data-dismiss="modal" data-toggle="modal">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Search by city result / shared modal -->
 
@@ -72,38 +94,18 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-target="#cityForecast" data-dismiss="modal" data-toggle="modal" id="city-forecast">Forecast</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#cityForecast" data-dismiss="modal" data-toggle="modal" id="city-forecast">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search by city modal for mobile -->
-
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Mobile</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search By City" aria-label="Search" required />
-                                <button class="btn btn-outline-success my-2 my-sm-0 search" type="button" data-target="#searchModal,#sharedModal" data-dismiss="modal" data-toggle="modal">Search</button>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Search by City forecast weather -->
-            <div class="modal fade" id="cityForecast" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+
+            <div class="modal fade forecast-modal" id="cityForecast" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog forecast-dialog" role="document">
+                    <div class="modal-content forecast-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="cityForecast-title">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -111,7 +113,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="card forecast">
+                            <div class="card forecast cityForecast">
                                 <div class="img-container">
                                     <img class="card-img cityForecast-img" src="css/img/sun.svg" />
                                 </div>
@@ -128,7 +130,7 @@
                                 </div>
                             </div>
 
-                            <div class="card forecast">
+                            <div class="card forecast cityForecast">
                                 <div class="img-container">
                                     <img class="card-img cityForecast-img" src="css/img/sun.svg" />
                                 </div>
@@ -145,7 +147,7 @@
                                 </div>
                             </div>
 
-                            <div class="card forecast">
+                            <div class="card forecast cityForecast">
                                 <div class="img-container">
                                     <img class="card-img cityForecast-img" src="css/img/sun.svg" />
                                 </div>
@@ -162,7 +164,7 @@
                                 </div>
                             </div>
 
-                            <div class="card forecast">
+                            <div class="card forecast cityForecast">
                                 <div class="img-container">
                                     <img class="card-img cityForecast-img" src="css/img/sun.svg" />
                                 </div>
@@ -179,7 +181,7 @@
                                 </div>
                             </div>
 
-                            <div class="card forecast">
+                            <div class="card forecast cityForecast">
                                 <div class="img-container">
                                     <img class="card-img cityForecast-img" src="css/img/sun.svg" />
                                 </div>
@@ -198,7 +200,6 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -231,7 +232,7 @@
                         <div class="containers upper">
                             <div class="card forecast">
                                 <div class="img-container">
-                                    <img class="card-img cityForecast-img" src="css/img/sun.svg" />
+                                    <img class="card-img forecast-img" src="css/img/sun.svg" />
                                 </div>
                                 <div class="card-body body-container">
                                     <div class="weather-container">
