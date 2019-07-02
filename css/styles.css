@@ -183,7 +183,7 @@ p {
     border: 0.1rem solid black;
 }
 
-.forecast:hover,
+.forecast:not(.cityForecast):hover,
 .main-card:hover {
     box-shadow: 1rem 1rem 0.5rem 0rem rgba(0, 0, 0, 0.3);
     border: 0.2rem solid black;
@@ -191,10 +191,10 @@ p {
 }
 
 .main-card:hover .temp-container,
-.forecast:hover .forecast-temp__container {
+.forecast:not(.cityForecast):hover .forecast-temp__container {
     border: 0.2rem solid black;
 }
-.forecast:hover .body-container,
+.forecast:not(.cityForecast):hover .body-container,
 .main-card:hover .body-container {
     border-top: 0.2rem solid black;
 }
@@ -305,6 +305,17 @@ form .btn {
 
 .modal-card {
     border: 1px solid;
+}
+
+.forecast-dialog {
+    max-width: none;
+    width: 90%;
+}
+
+.cityForecast-weather,
+.cityForecast-temp,
+.cityForecast-date {
+    font-size: 1.5rem;
 }
 
 @media (max-width: 600px) {
