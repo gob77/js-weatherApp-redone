@@ -1,15 +1,20 @@
 # Weather App
 
-This is a FreeCodeCamp project that i made a time ago and im remaking it because the old version was not finished and presented some bugs and problems, for now its just the html and css part of the app, over time i will be adding the javascript part and correcting issues and bugs.
+This is a FreeCodeCamp project that i made a time ago and im remaking it because the old version was not finished and presented some bugs and problems, it will display current weather and forecast for the user current location, and a search by city option where you can see the current weather and forecast in the city selected.
 
 ## To Do.
 
-- [ ] Add geoLocation.
-- [ ] Add API info.
+- [x] Add geoLocation.
+- [x] Add API info.
 - [x] Add weather icons.
-- [ ] Add weather images.
-- [ ] Show weather condition and images.
+- [x] Add weather images.
+- [x] Show weather condition and images.
+- [x] Added forecast.
+- [x] Added search by city.
+- [x] Added modasl for search by city weather and forecast.
+
 
 ## To Fix.
 
 - [ ] Fix issues with images responsiveness.
+- [ ] Fix problems with showing search by city forecast.
