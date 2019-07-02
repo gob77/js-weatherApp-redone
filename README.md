@@ -13,9 +13,9 @@ This is a FreeCodeCamp project that i made a time ago and im remaking it because
 -   [x] Added search by city.
 -   [x] Added modals for search by city weather and forecast.
 -   [x] Fixed issues displaying multiple modals on screen.
+-   [x] Fixed issues with input search that make the page reload when press "enter" key.
 
 ## To Fix.
 
 -   [ ] Fix issues with responsiveness.
 -   [ ] Fix problems with showing search by city forecast.
--   [ ] Fix issues with input search that make the page reload when press "enter" key.
