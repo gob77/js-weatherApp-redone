@@ -1,20 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let test = window.matchMedia("(max-width: 600px)");
+    let search = document.getElementById("city");
+    search.addEventListener("keydown", event => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    });
+
+    let testW = window.matchMedia("(max-width: 600px)");
 
     function testing() {
-        if (test.matches === true) {
+        if (testW.matches === true) {
             console.log("width is less than 600 pixels");
         } else {
             console.log("width is more than 600 pixels");
         }
     }
 
-    test.addListener(testing);
+    testW.addListener(testing);
 
     let loading_screen = pleaseWait({
-        logo: "img/loading1.gif",
+        logo: "css/img/loading.gif",
         backgroundColor: "#E3F2FD",
-        //loadingHtml: "<div class='rect1'></div><div class='rect2'></div><div class='rect3'></div><div class='rect4'></div><div class='rect5'></div>",
         loadingHtml: `
         <div class='sk-spinner sk-spinner-wave'>
             <div class='sk-rect1'></div>
@@ -44,25 +50,22 @@ document.addEventListener("DOMContentLoaded", () => {
         getForecast(lat, lon);
     });
 
-    let city = document.getElementById("citybtn");
-    city.addEventListener("click", getCity);
-
     let icon = weather => {
         let weatherId = weather;
         if (weatherId >= 801 && weatherId <= 804) {
-            return `img/80x - cloud.svg`;
+            return `./css/img/80x - cloud.svg`;
         } else if (weatherId === 800) {
-            return `img/800 - clear.svg`;
+            return `./css/img/800 - clear.svg`;
         } else if (weatherId >= 600 && weatherId <= 622) {
-            return `img/600 - snow.svg`;
+            return `./css/img/600 - snow.svg`;
         } else if (weatherId >= 500 && weatherId <= 531) {
-            return `img/500 - rain.svg`;
+            return `./css/img/500 - rain.svg`;
         } else if (weatherId >= 300 && weatherId <= 321) {
-            return `img/300 - drizzle.svg`;
+            return `./css/img/300 - drizzle.svg`;
         } else if (weatherId >= 200 && weatherId <= 232) {
-            return `img/200 - thunder.svg`;
+            return `./css/img/200 - thunder.svg`;
         } else if (weatherId === 741 || weatherId === 701 || weatherId === 721) {
-            return `img/700 - fog.svg`;
+            return `./css/img/700 - fog.svg`;
         }
     };
 
@@ -81,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function getWeather(a, b) {
         let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
         let data = await response.json();
+
         let temp = document.getElementById("temp");
         let location = document.getElementById("location");
         let date = document.getElementById("date");
@@ -90,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
 
         date.textContent = showDate(data.dt);
-        console.log(data);
+        //console.log(data);
         location.textContent = `${data.name} - ${data.sys.country}`;
         temp.textContent = `${Math.round(data.main.temp)}°C`;
         weatherIcon.src = icon(data.weather[0].id);
@@ -100,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let forecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
         let forecastData = await forecast.json();
 
-        console.log(forecastData);
+        //console.log(forecastData);
         let forecastList = forecastData.list;
         let forecastWeather = document.getElementsByClassName("forecast-weather");
         let forecastTemp = document.getElementsByClassName("forecast-temp");
@@ -204,26 +208,96 @@ document.addEventListener("DOMContentLoaded", () => {
             counter++;
         }
     }
+    let location;
 
-    async function getCity() {
-        let cityName = document.getElementById("city").value;
-        let modalTitle = document.getElementById("modal-title");
+    async function getCity(city) {
+        location = city;
         let cityTemp = document.getElementById("city-temp");
         let cityWeather = document.getElementById("city-weather");
         let cityDate = document.getElementById("city-date");
         let cityIcon = document.getElementById("city-icon");
-        console.log(cityName);
+        let body = document.getElementById("modal-body");
+        let title = document.getElementById("modal-title");
 
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let data = await response.json();
+        let cityResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
+        let cityData = await cityResponse.json();
 
-        console.log(data.weather[0].id);
-        modalTitle.textContent = `Showing Weather for: ${data.name} - ${data.sys.country}`;
-        cityTemp.textContent = `Current Weather in ${data.name} is: ${data.main.temp}°C`;
-        cityWeather.textContent = `the weather is ${data.weather[0].main}`;
-        cityDate.textContent = `${showDate(data.dt)}`;
-        cityIcon.src = icon(data.weather[0].id);
+        if (cityData.cod === "404") {
+            title.textContent = "Error";
+            body.textContent = cityData.message;
+            document.getElementById("city").value = "";
+        } else {
+            title.textContent = `Showing Weather for: ${cityData.name} - ${cityData.sys.country}`;
+            cityTemp.textContent = `${Math.round(cityData.main.temp)}°C`;
+            cityWeather.textContent = `${cityData.weather[0].main} - ${cityData.weather[0].description}`;
+            cityDate.textContent = `${showDate(cityData.dt)}`;
+            cityIcon.src = icon(cityData.weather[0].id);
+            document.getElementById("city").value = "";
+        }
     }
+
+    async function getCityForecast() {
+        let cityForecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
+        let forecastData = await cityForecast.json();
+
+        let cityList = forecastData.list;
+
+        console.log(forecastData.list);
+
+        let currentDate = new Date();
+        let forecastDays = {
+            /* 22 : {
+                min : x,
+                max: x
+            } */
+        };
+
+        for (let i = 1; i < 6; i++) {
+            let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
+            forecastDays[nextDay.getDate()] = {};
+        }
+        currentDate = new Date();
+
+        for (let i = 0; i < cityList.length; i++) {
+            // getting dates to compare an put data into de data container object
+            let listDate = new Date(cityList[i].dt * 1000);
+            let date = listDate.getDate();
+            let objectDate = forecastDays[date];
+
+            let tempMin = Math.round(cityList[i].main.temp_min);
+            let tempMax = Math.round(cityList[i].main.temp_max);
+            let weather = cityList[i].weather[0].main;
+            let description = cityList[i].weather[0].description;
+            let iconId = cityList[i].weather[0].id;
+
+            if (currentDate.getDate() != date) {
+                objectDate.min = objectDate.min == null ? tempMin : objectDate.min < tempMin ? objectDate.min : tempMin;
+
+                objectDate.max = objectDate.max == null ? tempMax : objectDate.max > tempMax ? objectDate.max : tempMax;
+
+                objectDate.weather = objectDate.weather == null ? weather : objectDate.weather < weather ? objectDate.weather : weather;
+
+                objectDate.description = objectDate.description == null ? description : objectDate.description;
+
+                objectDate.id = objectDate.id == null ? iconId : objectDate.id;
+            }
+        }
+        console.log(forecastDays);
+    }
+
+    let cityForecast = document.getElementById("city-forecast");
+    cityForecast.addEventListener("click", getCityForecast);
+
+    let cityBtn = document.getElementById("citybtn");
+    cityBtn.addEventListener("click", () => {
+        let city = document.getElementById("city").value;
+        if (city === "") {
+            event.stopPropagation();
+            console.log(city);
+        } else {
+            getCity(city);
+        }
+    });
 
     $("#sharedModal").modal({ backdrop: "static", show: false });
 
