@@ -1,23 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let search = document.getElementsByClassName("search");
+    let search = document.getElementsByClassName("form-control");
 
-    let stopPropagation = () => {
+    let preventReaload = () => {
         for (let i = 0; i < search.length; i++) {
-            search[i].addEventListener("keydown", function(event) {
-                event.preventDefault();
+            search[i].addEventListener("keydown", event => {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                }
             });
-            search[i].addEventListener("click", getcity);
         }
     };
 
-    /*  function stopEvent() {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-            }
-        }
-    } */
-
-    stopPropagation();
+    preventReaload();
 
     let testW = window.matchMedia("(max-width: 600px)");
 
