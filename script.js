@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     let search = document.getElementsByClassName("form-control");
+    let searchBTN = document.getElementsByClassName("search");
 
     let preventReaload = () => {
         for (let i = 0; i < search.length; i++) {
@@ -8,8 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     event.preventDefault();
                 }
             });
+            searchBTN[i].addEventListener("click", getcity);
         }
     };
+
+    let forecastBTN = document.getElementById("city-forecast");
+    forecastBTN.addEventListener("click", getCityForecast);
 
     preventReaload();
 
@@ -107,19 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weatherIcon.src = icon(data.weather[0].id);
     }
 
-    async function getForecast(a, b) {
-        let forecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let forecastData = await forecast.json();
-
-        //console.log(forecastData);
-        let forecastList = forecastData.list;
-        let forecastWeather = document.getElementsByClassName("forecast-weather");
-        let forecastTemp = document.getElementsByClassName("forecast-temp");
-        let forecastDate = document.getElementsByClassName("forecast-date");
-        let forecastImg = document.getElementsByClassName("forecast-img");
-
-        // The function below was made in colaboration with Matias Fernandez (https://github.com/thematho)
-
+    let forecastTest = list => {
         let currentDate = new Date();
         let nextDays = {
             /* 22 : {
@@ -130,26 +123,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = 1; i < 6; i++) {
             let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
-            let day = nextDay.getDay();
-            let date = nextDay.getDate();
-            let month = nextDay.getMonth() + 1;
             nextDays[nextDay.getDate()] = {};
-            forecastDate[i - 1].textContent = `${days[day]} - ${date < 10 ? `0${date}` : date} / ${month < 10 ? `0${month}` : month}`;
         }
         currentDate = new Date();
 
-        for (let i = 0; i < forecastList.length; i++) {
+        for (let i = 0; i < list.length; i++) {
             // getting dates to compare an put data into de data container object
-            let listDate = new Date(forecastList[i].dt * 1000);
+            let listDate = new Date(list[i].dt * 1000);
             let date = listDate.getDate();
             let objectDate = nextDays[date];
 
             // getting the data
-            let tempMin = Math.round(forecastList[i].main.temp_min);
-            let tempMax = Math.round(forecastList[i].main.temp_max);
-            let weather = forecastList[i].weather[0].main;
-            let description = forecastList[i].weather[0].description;
-            let iconId = forecastList[i].weather[0].id;
+            let tempMin = Math.round(list[i].main.temp_min);
+            let tempMax = Math.round(list[i].main.temp_max);
+            let weather = list[i].weather[0].main;
+            let description = list[i].weather[0].description;
+            let iconId = list[i].weather[0].id;
+            let dt = list[i].dt;
 
             if (currentDate.getDate() != date) {
                 objectDate.min = objectDate.min == null ? tempMin : objectDate.min < tempMin ? objectDate.min : tempMin;
@@ -161,56 +151,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 objectDate.description = objectDate.description == null ? description : objectDate.description;
 
                 objectDate.id = objectDate.id == null ? iconId : objectDate.id;
+
+                objectDate.dt = objectDate.dt == null ? dt : objectDate.dt;
             }
         }
+        return nextDays;
+    };
 
-        /* let currentDate = new Date();
-        let nextDays = {
-            /* 22 : {
-                min : x,
-                max: x
-            } 
-        };
+    async function getForecast(a, b) {
+        let forecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
+        let forecastData = await forecast.json();
 
-        for (let i = 1; i < 6; i++) {
-            let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
-            nextDays[nextDay.getDate()] = {};
-            forecastDate[i - 1].textContent = `${days[nextDay.getDay()]} - ${nextDay.getDate()} / ${nextDay.getMonth() < 10 ? `0` : nextDay.getMonth() + 1}${nextDay.getMonth() + 1}`;
-        }
-        currentDate = new Date();
+        //console.log(forecastData);
+        let forecastList = forecastData.list;
+        let forecastWeather = document.getElementsByClassName("forecast-weather");
+        let forecastTemp = document.getElementsByClassName("forecast-temp");
+        let forecastDate = document.getElementsByClassName("forecast-date");
+        let forecastImg = document.getElementsByClassName("forecast-img");
 
-        for (let i = 0; i < forecastList.length; i++) {
-            let date = new Date(forecastList[i].dt * 1000);
-            if (currentDate.getDate() != date.getDate()) {
-                nextDays[date.getDate()].min = nextDays[date.getDate()].min == null ? forecastList[i].main.temp_min : nextDays[date.getDate()].min < forecastList[i].main.temp_min ? nextDays[date.getDate()].min : forecastList[i].main.temp_min;
-
-                nextDays[date.getDate()].max = nextDays[date.getDate()].max == null ? forecastList[i].main.temp_max : nextDays[date.getDate()].max > forecastList[i].main.temp_max ? nextDays[date.getDate()].max : forecastList[i].main.temp_max;
-
-                nextDays[date.getDate()].weather = nextDays[date.getDate()].weather == null ? forecastList[i].weather[0].main : nextDays[date.getDate()].weather < forecastList[i].weather[0].main ? nextDays[date.getDate()].weather : forecastList[i].weather[0].main;
-
-                nextDays[date.getDate()].description = nextDays[date.getDate()].description == null ? forecastList[i].weather[0].description : nextDays[date.getDate()].description < forecastList[i].weather[0].description ? nextDays[date.getDate()].description : forecastList[i].weather[0].description;
-
-                nextDays[date.getDate()].id = nextDays[date.getDate()].id == null ? forecastList[i].weather[0].id : nextDays[date.getDate()].id > forecastList[i].weather[0].id ? nextDays[date.getDate()].id : forecastList[i].weather[0].id;
-            }
-        }
-
-
-        } */
-
-        // The function above was made in colaboration with Matias Fernandez (https://github.com/thematho)
+        let data = forecastTest(forecastList);
 
         let counter = 0;
-        for (keys in nextDays) {
-            let objectKey = nextDays[keys];
+        for (keys in data) {
+            let objectKey = data[keys];
             let temperature = forecastTemp[counter];
             let img = forecastImg[counter];
             let weather = forecastWeather[counter];
+            let date = forecastDate[counter];
 
             temperature.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
 
             img.src = icon(objectKey.id);
 
             weather.textContent = `${objectKey.weather} - ${objectKey.description}`;
+
+            date.textContent = showDate(objectKey.dt);
 
             counter++;
         }
@@ -260,56 +235,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log(forecastData.list);
 
-        let currentDate = new Date();
-        let forecastDays = {
-            /* 22 : {
-                min : x,
-                max: x
-            } */
-        };
+        let data = forecastTest(cityList);
 
-        for (let i = 1; i < 6; i++) {
-            let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
-            forecastDays[nextDay.getDate()] = {};
-            let day = nextDay.getDay();
-            let date = nextDay.getDate();
-            let month = nextDay.getMonth() + 1;
-            forecastDays[nextDay.getDate()] = {};
-            cityDate[i - 1].textContent = `${days[day]} - ${date < 10 ? `0${date}` : date} / ${month < 10 ? `0${month}` : month}`;
-        }
-        currentDate = new Date();
-
-        for (let i = 0; i < cityList.length; i++) {
-            // getting dates to compare an put data into de data container object
-            let listDate = new Date(cityList[i].dt * 1000);
-            let date = listDate.getDate();
-            let objectDate = forecastDays[date];
-
-            let tempMin = Math.round(cityList[i].main.temp_min);
-            let tempMax = Math.round(cityList[i].main.temp_max);
-            let weather = cityList[i].weather[0].main;
-            let description = cityList[i].weather[0].description;
-            let iconId = cityList[i].weather[0].id;
-
-            if (currentDate.getDate() != date) {
-                objectDate.min = objectDate.min == null ? tempMin : objectDate.min < tempMin ? objectDate.min : tempMin;
-
-                objectDate.max = objectDate.max == null ? tempMax : objectDate.max > tempMax ? objectDate.max : tempMax;
-
-                objectDate.weather = objectDate.weather == null ? weather : objectDate.weather < weather ? objectDate.weather : weather;
-
-                objectDate.description = objectDate.description == null ? description : objectDate.description;
-
-                objectDate.id = objectDate.id == null ? iconId : objectDate.id;
-            }
-        }
+        console.log(data);
 
         let counter = 0;
-        for (keys in forecastDays) {
-            let objectKey = forecastDays[keys];
+        for (keys in data) {
+            let objectKey = data[keys];
             let temperature = cityTemp[counter];
             let img = cityImg[counter];
             let weather = cityWeather[counter];
+            let date = cityDate[counter];
 
             temperature.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
 
@@ -317,9 +253,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             weather.textContent = `${objectKey.weather} - ${objectKey.description}`;
 
+            date.textContent = showDate(objectKey.dt);
+
             counter++;
         }
-        console.log(forecastDays);
     }
 
     function getcity(event) {
