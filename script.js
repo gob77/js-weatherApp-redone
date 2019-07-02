@@ -1,10 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let search = document.getElementById("city");
-    search.addEventListener("keydown", event => {
-        if (event.keyCode === 13) {
-            event.preventDefault();
+    let search = document.getElementsByClassName("search");
+
+    let stopPropagation = () => {
+        for (let i = 0; i < search.length; i++) {
+            search[i].addEventListener("keydown", function(event) {
+                event.preventDefault();
+            });
+            search[i].addEventListener("click", getcity);
         }
-    });
+    };
+
+    /*  function stopEvent() {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        }
+    } */
+
+    stopPropagation();
 
     let testW = window.matchMedia("(max-width: 600px)");
 
@@ -210,8 +223,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     let location;
 
-    async function getCity(city) {
-        location = city;
+    async function searchCity(city) {
+        console.log(location);
         let cityTemp = document.getElementById("city-temp");
         let cityWeather = document.getElementById("city-weather");
         let cityDate = document.getElementById("city-date");
@@ -231,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cityTemp.textContent = `${Math.round(cityData.main.temp)}°C`;
             cityWeather.textContent = `${cityData.weather[0].main} - ${cityData.weather[0].description}`;
             cityDate.textContent = `${showDate(cityData.dt)}`;
-            cityIcon.src = icon(cityData.weather[0].id);
+            //cityIcon.src = icon(cityData.weather[0].id);
             document.getElementById("city").value = "";
         }
     }
@@ -239,6 +252,15 @@ document.addEventListener("DOMContentLoaded", () => {
     async function getCityForecast() {
         let cityForecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
         let forecastData = await cityForecast.json();
+
+        let cityImg = document.getElementsByClassName("cityForecast-img");
+        let cityWeather = document.getElementsByClassName("cityForecast-weather");
+        let cityTemp = document.getElementsByClassName("cityForecast-temp");
+        let cityDate = document.getElementsByClassName("cityForecast-date");
+        let cityTitle = document.getElementById("cityForecast-title");
+
+        cityTitle.textContent = `Showing forecast for: ${location}`;
+        cityTitle.style.textTransform = "capitalize";
 
         let cityList = forecastData.list;
 
@@ -255,6 +277,11 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let i = 1; i < 6; i++) {
             let nextDay = new Date(currentDate.setDate(currentDate.getDate() + 1));
             forecastDays[nextDay.getDate()] = {};
+            let day = nextDay.getDay();
+            let date = nextDay.getDate();
+            let month = nextDay.getMonth() + 1;
+            forecastDays[nextDay.getDate()] = {};
+            cityDate[i - 1].textContent = `${days[day]} - ${date < 10 ? `0${date}` : date} / ${month < 10 ? `0${month}` : month}`;
         }
         currentDate = new Date();
 
@@ -282,22 +309,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 objectDate.id = objectDate.id == null ? iconId : objectDate.id;
             }
         }
+
+        let counter = 0;
+        for (keys in forecastDays) {
+            let objectKey = forecastDays[keys];
+            let temperature = cityTemp[counter];
+            let img = cityImg[counter];
+            let weather = cityWeather[counter];
+
+            temperature.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
+
+            img.src = icon(objectKey.id);
+
+            weather.textContent = `${objectKey.weather} - ${objectKey.description}`;
+
+            counter++;
+        }
         console.log(forecastDays);
     }
 
-    let cityForecast = document.getElementById("city-forecast");
-    cityForecast.addEventListener("click", getCityForecast);
-
-    let cityBtn = document.getElementById("citybtn");
-    cityBtn.addEventListener("click", () => {
+    function getcity(event) {
         let city = document.getElementById("city").value;
-        if (city === "") {
-            event.stopPropagation();
-            console.log(city);
-        } else {
-            getCity(city);
+        let mobileCity = document.getElementById("searchForMobile").value;
+        if (event.target.id === "citybtn") {
+            location = city;
+            searchCity();
+        } else if (event.target.id === "mobile-search" && mobileCity != "") {
+            location = mobileCity;
+            searchCity();
         }
-    });
+    }
 
     $("#sharedModal").modal({ backdrop: "static", show: false });
 
