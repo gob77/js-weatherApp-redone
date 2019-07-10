@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     preventReaload();
 
-    let testW = window.matchMedia("(max-width: 600px)");
+    /*     let testW = window.matchMedia("(max-width: 600px)");
 
     function testing() {
         if (testW.matches === true) {
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    testW.addListener(testing);
+    testW.addListener(testing); */
 
     let loading_screen = pleaseWait({
         logo: "css/img/loading.gif",
@@ -60,14 +60,17 @@ document.addEventListener("DOMContentLoaded", () => {
     navigator.geolocation.getCurrentPosition(async position => {
         lat = parseFloat(position.coords.latitude).toFixed(3);
         lon = parseFloat(position.coords.longitude).toFixed(3);
-        getWeather(lat, lon);
-        getForecast(lat, lon);
+        //getWeather(lat, lon);
+        //getForecast(lat, lon);
 
         const api_url = `weather/${lat},${lon}`;
         const response = await fetch(api_url);
         const response_json = await response.json();
-        console.log(api_url);
-        console.log(response_json);
+        //console.log(api_url);
+        //console.log(response_json);
+
+        displayWeather(response_json.current);
+        getForecast(response_json.forecast);
     });
 
     let icon = weather => {
@@ -101,22 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${days[weekDay]} - ${day < 10 ? `0${day}` : day} / ${month < 10 ? `0${month + 1}` : month + 1}`;
     };
 
-    async function getWeather(a, b) {
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let data = await response.json();
-
+    function displayWeather(data) {
         let temp = document.getElementById("temp");
         let location = document.getElementById("location");
         let date = document.getElementById("date");
         let weather = document.getElementById("weather");
         let weatherIcon = document.getElementById("weather_icon");
 
-        weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
-
-        date.textContent = showDate(data.dt);
-        //console.log(data);
-        location.textContent = `${data.name} - ${data.sys.country}`;
         temp.textContent = `${Math.round(data.main.temp)}°C`;
+        location.textContent = `${data.name} - ${data.sys.country}`;
+        date.textContent = showDate(data.dt);
+        weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
         weatherIcon.src = icon(data.weather[0].id);
     }
 
@@ -166,9 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return nextDays;
     };
 
-    async function getForecast(a, b) {
-        let forecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${a}&lon=${b}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let forecastData = await forecast.json();
+    async function getForecast(forecastData) {
+        console.log("this is the forecast data", forecastData);
 
         //console.log(forecastData);
         let forecastList = forecastData.list;
