@@ -2,7 +2,7 @@
 ##  [RealTime Weather](https://realtimeweather.herokuapp.com/).
 
 This is a FreeCodeCamp project that i made a time ago and im remaking it because the old version was not finished and presented some bugs and problems, it will display current weather and forecast for the user current location, and a search by city option where you can see the current weather and forecast in the city selected.
-This site is hosted in [Heroku](hettps://www.heroku.com)
+This site is hosted in [Heroku](https://www.heroku.com)
 
 ## Done.
 
