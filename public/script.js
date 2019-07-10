@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    let forecastBTN = document.getElementById("city-forecast");
-    forecastBTN.addEventListener("click", getCityForecast);
+    /* let forecastBTN = document.getElementById("city-forecast");
+    forecastBTN.addEventListener("click", getCityForecast); */
 
     preventReaload();
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         getForecast(response_json.forecast);
     });
 
-    let icon = weather => {
+    let getIcon = weather => {
         let weatherId = weather;
         if (weatherId >= 801 && weatherId <= 804) {
             return `./css/img/80x - cloud.svg`;
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         location.textContent = `${data.name} - ${data.sys.country}`;
         date.textContent = showDate(data.dt);
         weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
-        weatherIcon.src = icon(data.weather[0].id);
+        weatherIcon.src = getIcon(data.weather[0].id);
     }
 
     let forecastTest = list => {
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function getForecast(forecastData) {
-        console.log("this is the forecast data", forecastData);
+        //console.log("this is the forecast data", forecastData);
 
         //console.log(forecastData);
         let forecastList = forecastData.list;
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             temperature.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
 
-            img.src = icon(objectKey.id);
+            img.src = getIcon(objectKey.id);
 
             weather.textContent = `${objectKey.weather} - ${objectKey.description}`;
 
@@ -197,68 +197,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     let location;
 
-    async function searchCity(city) {
-        console.log(location);
-        let cityTemp = document.getElementById("city-temp");
-        let cityWeather = document.getElementById("city-weather");
-        let cityDate = document.getElementById("city-date");
-        let cityIcon = document.getElementById("city-icon");
-        let body = document.getElementById("modal-body");
-        let title = document.getElementById("modal-title");
+    async function searchByCityName() {
+        const cityName = `search/${location}`;
 
-        let cityResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let cityData = await cityResponse.json();
-
-        if (cityData.cod === "404") {
-            title.textContent = "Error";
-            body.textContent = cityData.message;
-            document.getElementById("city").value = "";
-        } else {
-            title.textContent = `Showing Weather for: ${cityData.name} - ${cityData.sys.country}`;
-            cityTemp.textContent = `${Math.round(cityData.main.temp)}°C`;
-            cityWeather.textContent = `${cityData.weather[0].main} - ${cityData.weather[0].description}`;
-            cityDate.textContent = `${showDate(cityData.dt)}`;
-            //cityIcon.src = icon(cityData.weather[0].id);
-            document.getElementById("city").value = "";
-        }
+        const searchResult = await fetch(cityName);
+        const result_json = await searchResult.json();
+        displaySearchResult(result_json.weather);
+        displayForecastSearch(result_json.forecast);
     }
 
-    async function getCityForecast() {
-        let cityForecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`);
-        let forecastData = await cityForecast.json();
+    function displaySearchResult(data) {
+        let temp = document.getElementById("city-temp");
+        let weather = document.getElementById("city-weather");
+        let date = document.getElementById("city-date");
+        let icon = document.getElementById("city-icon");
+        let title = document.getElementById("modal-title");
 
-        let cityImg = document.getElementsByClassName("cityForecast-img");
-        let cityWeather = document.getElementsByClassName("cityForecast-weather");
-        let cityTemp = document.getElementsByClassName("cityForecast-temp");
-        let cityDate = document.getElementsByClassName("cityForecast-date");
-        let cityTitle = document.getElementById("cityForecast-title");
+        temp.textContent = `${Math.round(data.main.temp)}°C `;
+        weather.textContent = `${data.weather[0].main} - ${data.weather[0].description}`;
+        date.textContent = showDate(data.dt);
+        icon.src = getIcon(data.weather[0].id);
+        title.textContent = `Showing weather for: ${data.name} - ${data.sys.country}`;
+    }
 
-        cityTitle.textContent = `Showing forecast for: ${location}`;
-        cityTitle.style.textTransform = "capitalize";
-
-        let cityList = forecastData.list;
-
-        console.log(forecastData.list);
-
-        let data = forecastTest(cityList);
-
+    function displayForecastSearch(data) {
         console.log(data);
 
+        let img = document.getElementsByClassName("cityForecast-img");
+        let weather = document.getElementsByClassName("cityForecast-weather");
+        let temp = document.getElementsByClassName("cityForecast-temp");
+        let date = document.getElementsByClassName("cityForecast-date");
+        let title = document.getElementById("cityForecast-title");
+
+        let getNextDays = forecastTest(data.list);
+
         let counter = 0;
-        for (keys in data) {
-            let objectKey = data[keys];
-            let temperature = cityTemp[counter];
-            let img = cityImg[counter];
-            let weather = cityWeather[counter];
-            let date = cityDate[counter];
+        for (keys in getNextDays) {
+            let objectKey = getNextDays[keys];
+            let tempTXT = temp[counter];
+            let imgSRC = img[counter];
+            let weatherTXT = weather[counter];
+            let dateTXT = date[counter];
 
-            temperature.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
+            tempTXT.textContent = `Min: ${objectKey.min}°C / Max: ${objectKey.max}°C`;
 
-            img.src = icon(objectKey.id);
+            imgSRC.src = getIcon(objectKey.id);
 
-            weather.textContent = `${objectKey.weather} - ${objectKey.description}`;
+            weatherTXT.textContent = `${objectKey.weather} - ${objectKey.description}`;
 
-            date.textContent = showDate(objectKey.dt);
+            dateTXT.textContent = showDate(objectKey.dt);
 
             counter++;
         }
@@ -269,10 +256,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let mobileCity = document.getElementById("searchForMobile").value;
         if (event.target.id === "citybtn") {
             location = city;
-            searchCity();
+            searchByCityName();
         } else if (event.target.id === "mobile-search" && mobileCity != "") {
             location = mobileCity;
-            searchCity();
+            searchByCityName();
         }
     }
 

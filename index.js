@@ -31,3 +31,21 @@ app.get("/weather/:coords", async (request, response) => {
         forecast: forecastWeather_json
     });
 });
+
+app.get("/search/:location", async (request, response) => {
+    const location = request.params.location;
+    console.log(location);
+    const locationWeather = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`;
+    const locationForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=446355c29c56f4b0eaf41493d1017d93&units=metric`;
+
+    const fetch_locationWeather = await fetch(locationWeather);
+    const fetch_locationForecast = await fetch(locationForecast);
+
+    const locationWeather_json = await fetch_locationWeather.json();
+    const locationForecast_json = await fetch_locationForecast.json();
+
+    response.json({
+        weather: locationWeather_json,
+        forecast: locationForecast_json
+    });
+});
