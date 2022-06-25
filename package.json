@@ -15,7 +15,7 @@
     "author": "Mauricio Ortiz",
     "license": "ISC",
     "dependencies": {
-        "node-fetch": "^2.6.1"
+        "node-fetch": "^2.6.7"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
